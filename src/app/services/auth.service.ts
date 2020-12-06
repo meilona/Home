@@ -1,21 +1,56 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {UserModel} from '../models/user.model';
+import {UserService} from './user.service';
+import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+    private userCollection: AngularFirestoreCollection<UserModel>;
+    private users: Observable<UserModel[]>;
 
-  constructor(private fireAuth: AngularFireAuth) { }
+    constructor(private fireAuth: AngularFireAuth,
+                private db: AngularFirestore
+    ) {
+        this.userCollection = db.collection<UserModel> ('user');
+        this.users = this.userCollection.snapshotChanges().pipe(
+            map (actions => {
+                return actions.map (a => {
+                    const data = a.payload.doc.data();
+                    const id = a.payload.doc.id;
+                    return {id, ... data};
+                });
+            })
+        );
+  }
 
   registerUser(value) {
     return new Promise<any>((resolve, reject) => {
+
       this.fireAuth.createUserWithEmailAndPassword(value.email, value.password)
           .then(
-              res => resolve(res),
-              err => reject(err)
+              res => {
+                console.log('User id after reigstration = ' + res.user.uid);
+                const user: UserModel = {
+                  id: res.user.uid,
+                  email: value.email,
+                  fName: value.fName,
+                  lName: value.lName
+                };
+                this.userCollection.doc(res.user.uid).set(user);
+                resolve(res);
+              }, err => {
+                reject(err);
+              }
           );
     });
+
   }
 
   loginUser(value) {
@@ -44,5 +79,13 @@ export class AuthService {
 
   userDetails() {
     return this.fireAuth.user;
+  }
+
+  getCurrentUser() {
+      if (firebase.auth().currentUser) {
+          return firebase.auth().currentUser;
+      } else {
+          return null;
+      }
   }
 }

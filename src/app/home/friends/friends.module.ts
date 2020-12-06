@@ -16,6 +16,7 @@ import {FooterComponent} from '../components/footer/footer.component';
     IonicModule,
     FriendsPageRoutingModule
   ],
-  declarations: [FriendsPage, FooterComponent]
+  declarations: [FriendsPage, FooterComponent],
+  exports: [FooterComponent]
 })
 export class FriendsPageModule {}

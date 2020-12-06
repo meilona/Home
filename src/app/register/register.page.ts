@@ -22,7 +22,7 @@ export class RegisterPage implements OnInit {
 
   validationMessages = {
     fName: [
-      { type: 'required', message: 'Email is required.' }
+      { type: 'required', message: 'First Name is required.' }
     ],
     email: [
       { type: 'required', message: 'Email is required.' },
@@ -37,6 +37,10 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
 
     this.validationsForm = this.formBuilder.group({
+      fName: new FormControl('', Validators.compose([
+        Validators.required,
+      ])),
+      lName: new FormControl(''),
       email: new FormControl('', Validators.compose([
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -53,7 +57,8 @@ export class RegisterPage implements OnInit {
         .then(res => {
           console.log(res);
           this.errorMessage = '';
-          this.successMessage = 'Your account has been created. Please log in.';
+          this.successMessage = 'Your account has been created.';
+          this.validationsForm.reset();
           this.authSrv.loginUser(value).then(() => {
             this.navCtrl.navigateForward('/home');
           });

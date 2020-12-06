@@ -34,7 +34,6 @@ export class LoginPage implements OnInit {
   };
 
   ngOnInit() {
-
     this.validationForm = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
         Validators.required,
@@ -52,14 +51,8 @@ export class LoginPage implements OnInit {
         .then(res => {
           console.log(res);
           this.errorMessage = '';
+          this.validationForm.reset();
           this.navCtrl.navigateForward('/home');
-          // if (res.user) {
-          //   this.user.setUser({
-          //     value.email,
-          //     uid: res.user.uid
-          //   });
-          //   this.navCtrl.navigateForward('/home');
-          // }
         }, err => {
           console.dir(err);
           if (err.code === 'auth/user-not-found') {

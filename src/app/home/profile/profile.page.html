@@ -1,11 +1,25 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>profile</ion-title>
+    <ion-title>Profile</ion-title>
+    <ion-buttons slot="end">
+      <!-- <ion-button (click)="openDropdown()"> -->
+      <ion-button (click)="showMore($event)">
+        <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item>
+    <ion-label position="floating" color="primary">Name</ion-label>
+    <ion-input type="text" [readonly]="true" value="{{ user?.fName }} {{ user?.lName }}"></ion-input>
+  </ion-item>
 
+  <ion-item>
+    <ion-label position="floating" color="primary">Email</ion-label>
+    <ion-input type="text" [readonly]="true" value="{{ user?.email }}"></ion-input>
+  </ion-item>
 </ion-content>
 
 <ion-footer>
