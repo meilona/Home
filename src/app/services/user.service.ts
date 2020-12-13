@@ -20,14 +20,13 @@ export class UserService {
     this.storageRef = this.fireStorage.ref('user');
   }
 
-  getUsers(): AngularFirestoreCollection<UserModel>{
-    this.userRef = this.db.collection<UserModel>(this.dbPath);
-    console.log(this.userRef);
+  getUsers(userId: string): AngularFirestoreCollection<any>{
+    this.userRef = this.db.collection<any>(this.dbPath, ref => ref.where('id', '!=', userId));
     return this.userRef;
   }
 
-  getUser(userId: string): AngularFirestoreCollection<UserModel>{
-    this.userRef = this.db.collection<UserModel>(this.dbPath, ref => ref.where('id', '==', userId));
+  getUser(userId: string): AngularFirestoreCollection<any>{
+    this.userRef = this.db.collection<any>(this.dbPath, ref => ref.where('id', '==', userId));
     console.log(this.userRef);
     return this.userRef;
   }
@@ -35,5 +34,9 @@ export class UserService {
   updateProfile(idu: string, value: any){
     this.db.doc(this.dbPath + '/' + idu).update({fName: value.fName});
     this.db.doc(this.dbPath + '/' + idu).update({lName: value.lName});
+  }
+
+  updateFriends(idu: string, friendId: string){
+    this.db.doc(this.dbPath + '/' + idu).update({friendList: friendId});
   }
 }
