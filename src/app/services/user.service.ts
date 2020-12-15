@@ -39,4 +39,8 @@ export class UserService {
   updateFriends(idu: string, friendId: string){
     this.db.doc(this.dbPath + '/' + idu).update({friendList: friendId});
   }
+
+  updateLocations(idu: string, value: any){
+    this.db.doc(this.dbPath + '/' + idu).update({locations: value});
+  }
 }

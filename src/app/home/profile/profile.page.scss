@@ -1,0 +1,16 @@
+.image-center {
+  margin:0 auto;
+}
+
+.item-avatar {
+  margin-top: 20px;
+  width: 100% !important;
+  height : 100% !important;
+  max-width: 150px !important;  //any size
+  max-height: 150px !important;
+
+}
+
+ion-avatar img{
+  border: 2px solid black !important;
+}

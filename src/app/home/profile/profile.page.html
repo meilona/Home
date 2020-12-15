@@ -2,28 +2,56 @@
   <ion-toolbar>
     <ion-title>Profile</ion-title>
     <ion-buttons slot="end">
-      <!-- <ion-button (click)="openDropdown()"> -->
-      <ion-button (click)="showMore($event)">
-        <ion-icon slot="icon-only" name="ellipsis-vertical" ></ion-icon>
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-item>
-    <ion-label position="floating" color="primary">Name</ion-label>
-    <ion-input type="text" [readonly]="true" value="{{ user?.fName }} {{ user?.lName }}"></ion-input>
-  </ion-item>
-
-  <ion-item>
-    <ion-label position="floating" color="primary">Email</ion-label>
-    <ion-input type="text" [readonly]="true" value="{{ user?.email }}"></ion-input>
-  </ion-item>
+  <ion-card>
+    <ion-avatar class="image-center item-avatar">
+      <!-- <img src="/assets/image/2.jpg"/> -->
+      <img [src]="imageUrl"/>
+      <!-- <p>{{imageUrl}}</p> -->
+    </ion-avatar>
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>{{ user?.fName }} {{ user?.lName }}</ion-card-title>
+      <ion-card-subtitle>{{ user?.email }}</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+  <h4 style="margin-left: 10px">My Feeds</h4>
+  <ion-list>
+    <ion-item lines="none" *ngFor="let loc of userLocations">
+      <ion-icon slot="start" name="pin-outline" color="primary"></ion-icon>
+      <ion-label>
+        {{ user?.fName }} checked-in at {{loc.place}} {{loc.time}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
 <ion-footer>
-  <!-- <ion-label>{{ userId }}</ion-label> -->
-  <app-footer></app-footer>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button  (click)="goto('friends')">
+          <ion-icon name="people-outline"></ion-icon>
+          <ion-label>Friends</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button (click)="goto('home')">
+          <ion-icon name="map-outline"></ion-icon>
+          <ion-label>Home</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button  (click)="goto('profile')">
+          <ion-icon name="person-outline"></ion-icon>
+          <ion-label>Profile</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
 </ion-footer>
 

@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { FriendsPageRoutingModule } from './friends-routing.module';
 
 import { FriendsPage } from './friends.page';
-import {FooterComponent} from '../components/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -16,7 +15,6 @@ import {FooterComponent} from '../components/footer/footer.component';
     IonicModule,
     FriendsPageRoutingModule
   ],
-  declarations: [FriendsPage, FooterComponent],
-  exports: [FooterComponent]
+  declarations: [FriendsPage]
 })
 export class FriendsPageModule {}

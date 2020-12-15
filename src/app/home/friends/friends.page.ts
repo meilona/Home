@@ -29,36 +29,56 @@ export class FriendsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // get user logged id
+    this.authService.userDetails().subscribe(res => {
+      console.log('res', res);
+      if (res !== null) {
+        // console.log(res.uid);
+        this.userId = res.uid;
+        this.getUsers();
+      } else {
+        this.navCtrl.navigateBack('');
+      }
+    }, err => {
+      console.log('err', err);
+    });
+  }
 
-    // untuk dapetin id nya
-    this.userService.getUser('ocHkKUGuMWVeegL8HNnuw2osKvj2').snapshotChanges().pipe(
+  getUsers(){
+    this.userService.getUser(this.userId).snapshotChanges().pipe(
         map(changes =>
             changes.map(c => ({data: c.payload.doc.data()}))
         )
     ).subscribe(data => {
-      this.userFriends = data[0].data.friendList.split(',');
-      console.log(this.userFriends);
-      this.getFriendsData();
+      if (data[0].data.friendList && data[0].data.friendList[0] !== ''){
+        this.userFriends = data[0].data.friendList.split(',');
+        console.log(this.userFriends);
+        this.getFriendsData(1);
+      } else {
+        this.userFriends = [];
+        this.getFriendsData(0);
+      }
     });
   }
 
-  getFriendsData() {
-    console.log(this.userFriends);
+  getFriendsData(hasFriend) {
     // get all users data (except user)
-    this.userService.getUsers('ocHkKUGuMWVeegL8HNnuw2osKvj2').snapshotChanges().pipe(
+    this.userService.getUsers(this.userId).snapshotChanges().pipe(
         map(changes =>
             changes.map(c => c.payload.doc.data())
         )
     ).subscribe(data => {
       this.loadedFriends = [ ];
       this.tempUser = data;
-      for (this.j = 0; this.j < this.userFriends.length ; this.j++) {
-        for (this.i = 0; this.i < this.tempUser.length ; this.i++) {
-          if (this.userFriends[this.j] === this.tempUser[this.i].id ) {
-            // make friend list arr
-            this.loadedFriends.push(this.tempUser[this.i]);
-            // remove from temp if friend
-            this.tempUser.splice(this.i, 1);
+      if (hasFriend === 1){
+        for (this.j = 0; this.j < this.userFriends.length ; this.j++) {
+          for (this.i = 0; this.i < this.tempUser.length ; this.i++) {
+            if (this.userFriends[this.j] === this.tempUser[this.i].id ) {
+              // make friend list arr
+              this.loadedFriends.push(this.tempUser[this.i]);
+              // remove from temp if friend
+              this.tempUser.splice(this.i, 1);
+            }
           }
         }
       }
@@ -76,4 +96,11 @@ export class FriendsPage implements OnInit {
     console.log('remove friend.');
   }
 
+  goto(tab){
+    if (tab !== 'home') {
+      this.router.navigate(['home/' + tab]);
+    } else {
+      this.router.navigate([tab]);
+    }
+  }
 }
