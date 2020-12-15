@@ -4,6 +4,7 @@ import {map} from 'rxjs/operators';
 import {AuthService} from '../../../services/auth.service';
 import {NavController} from '@ionic/angular';
 import {Router} from '@angular/router';
+import {log} from 'util';
 
 @Component({
   selector: 'app-add',
@@ -17,6 +18,7 @@ export class AddPage implements OnInit {
   userId: string;
   private i: number;
   friendList: any;
+  notFriendsListBackup: any;
 
   constructor(
       private authService: AuthService,
@@ -38,34 +40,33 @@ export class AddPage implements OnInit {
       console.log('err', err);
     });
 
-    // get all users
-    // this.userService.getUsers().snapshotChanges().pipe(
-    //     map(changes =>
-    //         changes.map(c => c.payload.doc.data())
-    //     )
-    // ).subscribe(data => {
-    //   this.userData = [ ];
-    //   // this.contacts = data;
-    //   this.tempUser = data;
-    //   for (this.i = 0; this.i < this.tempUser.length ; this.i++) {
-    //     this.loadedUser = this.tempUser[this.i];
-    //     const user = {
-    //       id: this.loadedUser.id,
-    //       nama: this.loadedUser.fName + ' ' + this.loadedUser.lName
-    //     };
-    //     this.userData.push(user);
-    //   }
-    //   console.log(this.userData);
-    // });
     this.userData = this.router.getCurrentNavigation().extras.state.notFriends;
     this.friendList = this.router.getCurrentNavigation().extras.state.friendList;
+    this.notFriendsListBackup = this.userData;
     console.log(this.userData);
   }
 
-  add(friendId) {
-    // console.log(friendId);
+  add(friendId, id) {
+    console.log(id);
     this.friendList.push(friendId);
+    this.userData.splice(id, 1);
     this.userService.updateFriends(this.userId, this.friendList.toString());
+  }
+
+  async filterSearch(ev){
+    this.userData = this.notFriendsListBackup;
+    const searchTerm = ev.target.value;
+    console.log(searchTerm);
+    if (!searchTerm) {
+      document.getElementById('searchResult').classList.add('ion-hide');
+      return;
+    }
+    document.getElementById('searchResult').classList.remove('ion-hide');
+    this.userData = this.userData.filter(currentName => {
+      if ((currentName.fName + ' ' + currentName.lName) && searchTerm) {
+        return ((currentName.fName + ' ' + currentName.lName).toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 );
+      }
+    });
   }
 
 }

@@ -20,6 +20,7 @@ export class FriendsPage implements OnInit {
   loadedFriends: any;
   userFriends: any;
   userId: any;
+  friendListBackup: any;
 
   constructor(
       private userService: UserService,
@@ -69,6 +70,7 @@ export class FriendsPage implements OnInit {
         )
     ).subscribe(data => {
       this.loadedFriends = [ ];
+      this.friendListBackup = [ ];
       this.tempUser = data;
       if (hasFriend === 1){
         for (this.j = 0; this.j < this.userFriends.length ; this.j++) {
@@ -81,19 +83,36 @@ export class FriendsPage implements OnInit {
             }
           }
         }
+        this.friendListBackup = this.loadedFriends;
       }
     });
   }
 
-  searchPeople(){
+  addFriends(){
     console.log('search people.');
     this.router.navigate(['home/friends/add'], {
       state: { notFriends: this.tempUser , friendList : this.userFriends}
     });
   }
 
-  removeFriend(event, contactId, slidingItem: IonItemSliding){
-    console.log('remove friend.');
+  async filterSearch(ev){
+    this.loadedFriends = this.friendListBackup;
+    const searchTerm = ev.target.value;
+    console.log(searchTerm);
+    if (!searchTerm) {
+      return;
+    }
+    this.loadedFriends = this.loadedFriends.filter(currentName => {
+      if ((currentName.fName + ' ' + currentName.lName) && searchTerm) {
+        return ((currentName.fName + ' ' + currentName.lName).toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 );
+      }
+    });
+  }
+
+  removeFriend(idx, friendId, slidingItem: IonItemSliding){
+    this.userFriends.splice(idx, 1);
+    this.loadedFriends.splice(idx, 1);
+    this.userService.updateFriends(this.userId, this.userFriends.toString());
   }
 
   goto(tab){

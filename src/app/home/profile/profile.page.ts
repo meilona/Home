@@ -5,7 +5,7 @@ import {map} from 'rxjs/operators';
 import {UserModel} from '../../models/user.model';
 import {NgForm} from '@angular/forms';
 import {MoreComponent} from './more/more.component';
-import {NavController, PopoverController} from '@ionic/angular';
+import {AlertController, NavController, PopoverController} from '@ionic/angular';
 import {AuthService} from '../../services/auth.service';
 import * as moment from 'moment';
 
@@ -26,7 +26,8 @@ export class ProfilePage implements OnInit {
       private userService: UserService,
       private authService: AuthService,
       private router: Router,
-      private navCtrl: NavController
+      private navCtrl: NavController,
+      private alertCtrl: AlertController,
   ) { }
 
   ngOnInit() {
@@ -78,10 +79,42 @@ export class ProfilePage implements OnInit {
         };
         this.userLocations.push(newLocation);
       }
+      this.userLocations.reverse();
     }
   }
 
   ionViewDidEnter() {
+  }
+
+  async presentAlert(idx){
+    const alert = await this.alertCtrl.create({
+      header: 'Delete history lokasi ini?',
+      message: 'Lokasi yang dihapus tidak dapat dikembalikan lagi.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          handler: () => this.deleteLocation(idx)
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  deleteLocation(idx){
+    if (idx >= 0) {
+      this.userLocations.splice(idx, 1);
+      this.userLocations.reverse();
+      this.userService.updateLocations(this.userId, this.userLocations);
+    }
+  }
+
+  itemPressed(idx) {
+    console.log(idx);
+    this.presentAlert(idx);
   }
 
   logout(){

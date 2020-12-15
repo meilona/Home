@@ -23,7 +23,7 @@
   </ion-card>
   <h4 style="margin-left: 10px">My Feeds</h4>
   <ion-list>
-    <ion-item lines="none" *ngFor="let loc of userLocations">
+    <ion-item lines="none" *ngFor="let loc of userLocations; let i = index" (press)="itemPressed(i)">
       <ion-icon slot="start" name="pin-outline" color="primary"></ion-icon>
       <ion-label>
         {{ user?.fName }} checked-in at {{loc.place}} {{loc.time}}
