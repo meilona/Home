@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {IonItemSliding, NavController} from '@ionic/angular';
+import {AlertController, IonItemSliding, NavController, ToastController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
@@ -27,6 +27,8 @@ export class FriendsPage implements OnInit {
       private router: Router,
       private authService: AuthService,
       private navCtrl: NavController,
+      private toastCtrl: ToastController,
+      private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -43,6 +45,42 @@ export class FriendsPage implements OnInit {
     }, err => {
       console.log('err', err);
     });
+  }
+
+  async presentToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Friend Removed.',
+      color: 'danger',
+      duration: 2000
+    });
+    await toast.present();
+  }
+
+  async presentAlert(idx, fName, lName, slidingItem: IonItemSliding) {
+    slidingItem.close();
+    const alert = await this.alertCtrl.create({
+      header: 'Remove Friend',
+      message: 'Apakah yakin ingin menghapus ' + fName + ' ' + lName + ' dari teman anda? Jika sudah dihapus, anda dapat menambahkan teman anda kembali pada menu add friend.',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Remove',
+          handler:  () => this.removeFriend(idx)
+        }
+      ]
+    });
+    await  alert.present();
+  }
+
+  removeFriend(idx){
+    this.userFriends.splice(idx, 1);
+    this.loadedFriends.splice(idx, 1);
+    this.userService.updateFriends(this.userId, this.userFriends.toString());
+    this.presentToast();
   }
 
   getUsers(){
@@ -109,12 +147,6 @@ export class FriendsPage implements OnInit {
         return ((currentName.fName + ' ' + currentName.lName).toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 );
       }
     });
-  }
-
-  removeFriend(idx, friendId, slidingItem: IonItemSliding){
-    this.userFriends.splice(idx, 1);
-    this.loadedFriends.splice(idx, 1);
-    this.userService.updateFriends(this.userId, this.userFriends.toString());
   }
 
   goto(tab){

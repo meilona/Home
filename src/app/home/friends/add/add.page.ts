@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../../services/user.service';
 import {map} from 'rxjs/operators';
 import {AuthService} from '../../../services/auth.service';
-import {NavController} from '@ionic/angular';
+import {AlertController, IonItemSliding, NavController, ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {log} from 'util';
 
@@ -25,6 +25,8 @@ export class AddPage implements OnInit {
       private userService: UserService,
       private navCtrl: NavController,
       private router: Router,
+      private toastCtrl: ToastController,
+      private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
@@ -46,11 +48,41 @@ export class AddPage implements OnInit {
     console.log(this.userData);
   }
 
-  add(friendId, id) {
-    console.log(id);
+  async presentAlert(friendId, idx, fName, lName) {
+    const alert = await this.alertCtrl.create({
+      header: 'Add Friend',
+      message: 'Tambahkan ' + fName + ' ' + lName + ' menjadi teman anda?',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Add',
+          handler:  () => this.addFriend(friendId, idx)
+        }
+      ]
+    });
+    await  alert.present();
+  }
+
+  addFriend(friendId, idx) {
+    console.log(idx);
     this.friendList.push(friendId);
-    this.userData.splice(id, 1);
+    this.userData.splice(idx, 1);
     this.userService.updateFriends(this.userId, this.friendList.toString());
+    this.presentToast();
+  }
+
+
+  async presentToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Friend Added.',
+      color: 'success',
+      duration: 2000
+    });
+    await toast.present();
   }
 
   async filterSearch(ev){

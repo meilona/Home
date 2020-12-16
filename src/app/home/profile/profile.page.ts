@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {map} from 'rxjs/operators';
-import {AlertController, NavController, Platform, PopoverController} from '@ionic/angular';
+import {AlertController, NavController, Platform, PopoverController, ToastController} from '@ionic/angular';
 import {AuthService} from '../../services/auth.service';
 import * as moment from 'moment';
 import {Camera, CameraResultType, CameraSource, Capacitor} from '@capacitor/core';
@@ -31,10 +31,11 @@ export class ProfilePage implements OnInit {
       private authService: AuthService,
       private router: Router,
       private navCtrl: NavController,
-      private alertCtrl: AlertController,
       private platform: Platform,
       private sanitizer: DomSanitizer,
-      private storage: AngularFireStorage
+      private storage: AngularFireStorage,
+      private alertCtrl: AlertController,
+      private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
@@ -174,17 +175,10 @@ export class ProfilePage implements OnInit {
     }
   }
 
-  ionViewDidEnter() {
-  }
-
-  changePicture() {
-
-  }
-
   async presentAlert(idx){
     const alert = await this.alertCtrl.create({
-      header: 'Delete history lokasi ini?',
-      message: 'Lokasi yang dihapus tidak dapat dikembalikan lagi.',
+      header: 'Delete feed lokasi ini?',
+      message: 'Feed yang dihapus tidak dapat dikembalikan lagi.',
       buttons: [
         {
           text: 'Cancel',
@@ -205,7 +199,17 @@ export class ProfilePage implements OnInit {
       this.userLocationsBackup.splice(idx, 1); // save to firestore
       this.userLocationsBackup.reverse();
       this.userService.updateLocations(this.userId, this.userLocationsBackup);
+      this.presentToast();
     }
+  }
+
+  async presentToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Feed Deleted.',
+      color: 'warning',
+      duration: 2000
+    });
+    await toast.present();
   }
 
   itemPressed(idx) {

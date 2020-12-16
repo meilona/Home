@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {UserService} from '../services/user.service';
 import {AuthService} from '../services/auth.service';
-import {NavController} from '@ionic/angular';
+import {NavController, ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
 import firebase from 'firebase';
@@ -43,6 +43,7 @@ export class HomePage implements OnInit {
       private authService: AuthService,
       private navCtrl: NavController,
       private router: Router,
+      private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
@@ -238,6 +239,17 @@ export class HomePage implements OnInit {
     this.userService.updateLocations(this.userId, this.userLocations);
     this.locationValue = '';
     this.hideInputLocation();
+    this.presentToast();
+  }
+
+
+  async presentToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Checked-in',
+      color: 'success',
+      duration: 2000
+    });
+    await toast.present();
   }
 
   showInputLocation(){
