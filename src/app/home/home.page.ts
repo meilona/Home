@@ -5,6 +5,7 @@ import {NavController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {map} from 'rxjs/operators';
 import firebase from 'firebase';
+import {interval, Subscription} from 'rxjs';
 
 declare var google: any;
 
@@ -26,6 +27,7 @@ export class HomePage implements OnInit {
   private j: number;
   loadedFriends: any;
   userFriends: any;
+  private updateSubscription: Subscription;
 
   map: any;
   infoWindow: any = new google.maps.InfoWindow();
@@ -58,6 +60,44 @@ export class HomePage implements OnInit {
     }, err => {
       console.log('err', err);
     });
+
+    // subcribe auto update lokasi ke database setiap 10 menit
+    // 1000 = 1 s, 10 minute = 1000s * 60 * 10
+    this.updateSubscription = interval(600000).subscribe(
+        (val) => {
+          console.log('Update ke- ' + val);
+          this.automaticUpdateLastLocation();
+        }
+    );
+  }
+
+  automaticUpdateLastLocation(){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position: Position) => {
+        if (this.userMarker){
+          this.userMarker.setMap(null);
+        }
+
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        this.lat = pos.lat;
+        this.lng = pos.lng;
+
+        this.userMarker = new google.maps.Marker({
+          position: new google.maps.LatLng(this.lat, this.lng),
+          map: this.map,
+          icon: 'assets/icon/userMark.png'
+        });
+
+        console.log(pos);
+        this.map.setCenter(pos);
+        this.locationValue = 'AutoUpdate';
+        this.checkIn();
+      });
+    }
   }
 
   getUsers(){
@@ -124,26 +164,6 @@ export class HomePage implements OnInit {
         });
       }
     }
-
-    // for (let idx = 0; idx < this.loadedFriends.length; idx++){
-    //   if (this.loadedFriends[idx].locations){
-    //     const eachFriendLocation = this.loadedFriends[idx].locations[this.loadedFriends[idx].locations.length - 1];
-    //     const location = new google.maps.LatLng(eachFriendLocation.lat, eachFriendLocation.lng);
-    //     console.log(location);
-    //     const marker = new google.maps.Marker({
-    //       position: location,
-    //       map: this.map,
-    //       // icon: 'assets/icon/marker-friend.png',
-    //       clickable: true
-    //     });
-    //     marker.info = new google.maps.InfoWindow({
-    //       content: this.loadedFriends[idx].fName
-    //     });
-    //     google.maps.event.addListener(marker, 'click', function() {
-    //       marker.info.open(map, marker);
-    //     });
-    //   }
-    // }
   }
 
   ionViewDidEnter() {
@@ -175,13 +195,6 @@ export class HomePage implements OnInit {
         });
 
         console.log(pos);
-        // this.infoWindow.setPosition(pos);
-        // this.infoWindow.setContent('Your Current Location');
-        // this.infoWindow.open(this.map);
-        // this.userMarker = new google.maps.Marker({
-        //   position: new google.maps.LatLng(this.lat, this.lng),
-        //   map: this.map
-        // });
         this.map.setCenter(pos);
       });
     }
@@ -224,26 +237,26 @@ export class HomePage implements OnInit {
     this.userLocations.push(newLocation);
     this.userService.updateLocations(this.userId, this.userLocations);
     this.locationValue = '';
-    this.hideModal();
+    this.hideInputLocation();
     console.log('success');
   }
 
-  openModal(){
+  showInputLocation(){
     if (this.userMarker != null){
       document.getElementById('transparentLayer').classList.remove('ion-hide');
       document.getElementById('modalLayer').classList.remove('ion-hide');
-      document.getElementById('fabCurLoc').classList.add('ion-hide');
+      document.getElementById('showCurrentLocation').classList.add('ion-hide');
       document.getElementById('manualModal').classList.add('ion-hide');
     }
     else{
-      console.log('Pilih lokasi terlebih dahulu');
+      alert('Pin location sebelum check-in!');
     }
   }
 
-  hideModal(){
+  hideInputLocation(){
     document.getElementById('transparentLayer').classList.add('ion-hide');
     document.getElementById('modalLayer').classList.add('ion-hide');
-    document.getElementById('fabCurLoc').classList.remove('ion-hide');
+    document.getElementById('showCurrentLocation').classList.remove('ion-hide');
     document.getElementById('manualModal').classList.remove('ion-hide');
   }
 

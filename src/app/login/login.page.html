@@ -25,14 +25,6 @@
       <ion-label position="floating" color="primary">Password</ion-label>
       <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
     </ion-item>
-    <div class="validation-errors">
-      <ng-container *ngFor="let validation of validationMessages.password">
-        <div class="error-message" style="color: red;"
-             *ngIf="validationForm.get('password').hasError(validation.type) && (validationForm.get('password').dirty || validationForm.get('password').touched)">
-          {{ validation.message }}
-        </div>
-      </ng-container>
-    </div>
 
     <div class="p-3 mb-2">
       <div class="text-center">

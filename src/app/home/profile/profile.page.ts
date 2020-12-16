@@ -42,7 +42,9 @@ export class ProfilePage implements OnInit {
         this.platform.is('desktop')){
       this.isDesktop = true;
     }
+  }
 
+  ionViewWillEnter(){
     // get user logged id
     this.authService.userDetails().subscribe(res => {
       console.log('res', res);
@@ -64,13 +66,12 @@ export class ProfilePage implements OnInit {
     const ref = this.storage.ref('profilePhoto/' + this.userId + '.jpg');
     ref.getDownloadURL().subscribe(res => {
       console.log('res', res);
-      if (res > 0) {
-        this.photo = res;
-      } else {
-        // when no file uploaded yet
+      this.photo = res;
+      if (res <= 0) {
         this.photo = null;
       }
     });
+    console.log(this.photo);
   }
 
   async getPicture(type: string){

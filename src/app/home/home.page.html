@@ -9,13 +9,13 @@
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <ion-fab id="fabCurLoc" slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab id="showCurrentLocation" slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="showCurrentLoc()">
       <ion-icon name="locate-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-button id="manualModal" expand="block" (click)="openModal()">Check In</ion-button>
+  <ion-button id="manualModal" expand="block" (click)="showInputLocation()">Check In</ion-button>
 
   <ion-row id="transparentLayer" class="ion-hide max-width-height bg-layer" slot="fixed" (click)="hideModal()">
   </ion-row>

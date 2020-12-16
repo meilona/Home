@@ -39,10 +39,7 @@ export class LoginPage implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      password: new FormControl('', Validators.compose([
-        Validators.minLength(5),
-        Validators.required
-      ])),
+      password: new FormControl('', ),
     });
   }
 
@@ -58,7 +55,7 @@ export class LoginPage implements OnInit {
           if (err.code === 'auth/user-not-found') {
             console.log('User not found');
           }
-          this.errorMessage = err.message;
+          this.errorMessage = 'email or password is incorrect';
         });
   }
 
