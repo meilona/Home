@@ -57,6 +57,7 @@ export class FriendsPage implements OnInit {
         this.getFriendsData(1);
       } else {
         this.userFriends = [];
+        this.loadedFriends = null;
         this.getFriendsData(0);
       }
     });
@@ -69,10 +70,10 @@ export class FriendsPage implements OnInit {
             changes.map(c => c.payload.doc.data())
         )
     ).subscribe(data => {
-      this.loadedFriends = [ ];
-      this.friendListBackup = [ ];
       this.tempUser = data;
       if (hasFriend === 1){
+        this.loadedFriends = [ ];
+        this.friendListBackup = [ ];
         for (this.j = 0; this.j < this.userFriends.length ; this.j++) {
           for (this.i = 0; this.i < this.tempUser.length ; this.i++) {
             if (this.userFriends[this.j] === this.tempUser[this.i].id ) {
@@ -85,6 +86,7 @@ export class FriendsPage implements OnInit {
         }
         this.friendListBackup = this.loadedFriends;
       }
+      console.log(this.loadedFriends);
     });
   }
 

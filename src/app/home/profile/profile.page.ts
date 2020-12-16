@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {map} from 'rxjs/operators';
-import {ActionSheetController, AlertController, NavController, Platform, PopoverController} from '@ionic/angular';
+import {AlertController, NavController, Platform, PopoverController} from '@ionic/angular';
 import {AuthService} from '../../services/auth.service';
 import * as moment from 'moment';
 import {Camera, CameraResultType, CameraSource, Capacitor} from '@capacitor/core';
@@ -168,7 +168,9 @@ export class ProfilePage implements OnInit {
         };
         this.userLocations.push(newLocation);
       }
-      // this.userLocations.reverse();
+      if (this.userLocations.length <= 0) {
+        this.userLocations = null;
+      }
     }
   }
 

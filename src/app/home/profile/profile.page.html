@@ -13,9 +13,6 @@
   <ion-card>
     <ion-card-content>
       <ion-avatar class="image-center item-avatar">
-        <!-- <img src="/assets/image/2.jpg"/> -->
-<!--        <img [src]="imageUrl"/>-->
-        <!-- <p>{{imageUrl}}</p> -->
         <img src="assets/icon/person.png" *ngIf="!photo">
         <img id="profilePicture" style="object-fit: cover" src="{{photo}}" *ngIf="photo">
         <input type="file" *ngIf="isDesktop" #filePicker (change)="onFileChoose($event)"/>
@@ -28,11 +25,23 @@
     </ion-card-content>
     <ion-card-header class="ion-text-center">
       <ion-card-title>{{ user?.fName }} {{ user?.lName }}</ion-card-title>
-      <ion-card-subtitle>{{ user?.email }}</ion-card-subtitle>
+      <ion-card-subtitle *ngIf="user?.fName !== 'Meilona'">{{ user?.email }}</ion-card-subtitle>
+      <ion-card-subtitle *ngIf="user?.fName === 'Meilona'">00000026158</ion-card-subtitle>
+      <ion-text *ngIf="user?.fName === 'Meilona'">Kesan Pesan Singkat :</ion-text> <br>
+      <ion-text *ngIf="user?.fName === 'Meilona'">Awalnya week 1-3 mager banget karna bingung mobile cross kayak gmn tapi
+      lama kelamaan ini lebih mending daripada mobile 1. Terimakasih kepada Ko Yehez dan Ko James yang
+      udah jadi aslab padahal dah pada lulus. Semoga sukses selalu dalam segala pekerjaannya ko!</ion-text>
     </ion-card-header>
   </ion-card>
   <h4 style="margin-left: 10px">My Feeds</h4>
-  <ion-list>
+  <ion-card *ngIf="userLocations === null">
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>Tidak ada data check-in.</ion-card-title>
+      <img style="margin: 10px" src="assets/icon/searchlocation.png">
+      <ion-card-subtitle>Silahkan melakukan check-in lokasi pada menu home.</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+  <ion-list *ngIf="userLocations !== null">
     <ion-item lines="none" *ngFor="let loc of userLocations; let i = index" (press)="itemPressed(i)">
       <ion-icon slot="start" name="pin-outline" color="primary"></ion-icon>
       <ion-label>

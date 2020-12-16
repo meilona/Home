@@ -238,14 +238,12 @@ export class HomePage implements OnInit {
     this.userService.updateLocations(this.userId, this.userLocations);
     this.locationValue = '';
     this.hideInputLocation();
-    console.log('success');
   }
 
   showInputLocation(){
     if (this.userMarker != null){
       document.getElementById('transparentLayer').classList.remove('ion-hide');
       document.getElementById('modalLayer').classList.remove('ion-hide');
-      document.getElementById('showCurrentLocation').classList.add('ion-hide');
       document.getElementById('manualModal').classList.add('ion-hide');
     }
     else{
@@ -256,7 +254,6 @@ export class HomePage implements OnInit {
   hideInputLocation(){
     document.getElementById('transparentLayer').classList.add('ion-hide');
     document.getElementById('modalLayer').classList.add('ion-hide');
-    document.getElementById('showCurrentLocation').classList.remove('ion-hide');
     document.getElementById('manualModal').classList.remove('ion-hide');
   }
 

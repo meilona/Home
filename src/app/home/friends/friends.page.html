@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Friends</ion-title>
+    <ion-title>Friend List</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="addFriends()"><ion-icon name="person-add-outline"></ion-icon></ion-button>
     </ion-buttons>
@@ -8,7 +8,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-card *ngIf="loadedFriends === null">
+    <ion-card-header class="ion-text-center">
+      <ion-card-title>Anda belum memiliki teman.</ion-card-title>
+      <img style="margin: 10px" src="assets/icon/searchfriends.png">
+      <ion-card-subtitle>Klik icon pada bagian kanan atas untuk mencari teman.</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+  <ion-grid *ngIf="loadedFriends !== null">
     <ion-row>
       <ion-col size="12" size-sm="8" offset-sm="2" size-md="6" offset-md="3">
         <ion-searchbar placeholder="Search" (ionInput)="filterSearch($event)"></ion-searchbar>
