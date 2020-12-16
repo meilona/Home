@@ -11,11 +11,21 @@
 
 <ion-content>
   <ion-card>
-    <ion-avatar class="image-center item-avatar">
-      <!-- <img src="/assets/image/2.jpg"/> -->
-      <img [src]="imageUrl"/>
-      <!-- <p>{{imageUrl}}</p> -->
-    </ion-avatar>
+    <ion-card-content>
+      <ion-avatar class="image-center item-avatar">
+        <!-- <img src="/assets/image/2.jpg"/> -->
+<!--        <img [src]="imageUrl"/>-->
+        <!-- <p>{{imageUrl}}</p> -->
+        <img src="assets/icon/person.png" *ngIf="!photo">
+        <img id="profilePicture" style="object-fit: cover" src="{{photo}}" *ngIf="photo">
+        <input type="file" *ngIf="isDesktop" #filePicker (change)="onFileChoose($event)"/>
+      </ion-avatar>
+      <ion-fab vertical="bottom" horizontal="center" style="margin-left: 10px">
+        <ion-fab-button (click)="getPicture('camera')">
+          <ion-icon name="camera-reverse-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </ion-card-content>
     <ion-card-header class="ion-text-center">
       <ion-card-title>{{ user?.fName }} {{ user?.lName }}</ion-card-title>
       <ion-card-subtitle>{{ user?.email }}</ion-card-subtitle>
