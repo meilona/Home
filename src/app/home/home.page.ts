@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     // check logged in user
     this.authService.userDetails().subscribe(res => {
-      console.log('res', res);
+      // console.log('res', res);
       if (res !== null) {
         // console.log(res.uid);
         this.userId = res.uid;
@@ -59,14 +59,14 @@ export class HomePage implements OnInit {
         this.navCtrl.navigateBack('');
       }
     }, err => {
-      console.log('err', err);
+      // console.log('err', err);
     });
 
     // subcribe auto update lokasi ke database setiap 10 menit
     // 1000 = 1 s, 10 minute = 1000s * 60 * 10
     this.updateSubscription = interval(600000).subscribe(
         (val) => {
-          console.log('Update ke- ' + val);
+          // console.log('Update ke- ' + val);
           this.automaticUpdateLastLocation();
         }
     );
@@ -93,7 +93,7 @@ export class HomePage implements OnInit {
           icon: 'assets/icon/userMark.png'
         });
 
-        console.log(pos);
+        // console.log(pos);
         this.map.setCenter(pos);
         this.locationValue = 'AutoUpdate';
         this.checkIn();
@@ -116,14 +116,16 @@ export class HomePage implements OnInit {
       }
       if (data[0].data.friendList && data[0].data.friendList[0] !== ''){
         this.userFriends = data[0].data.friendList.split(',');
-        console.log(this.userFriends);
+        // console.log(this.userFriends);
         this.getFriendsData();
+      } else {
+        this.userFriends = null;
       }
     });
   }
 
   getFriendsData() {
-    console.log(this.userData); // user data
+    // console.log(this.userData); // user data
     // get all users data (except user)
     this.userService.getUsers(this.userId).snapshotChanges().pipe(
         map(changes =>
@@ -169,8 +171,10 @@ export class HomePage implements OnInit {
 
   ionViewDidEnter() {
     this.showMap();
-    if (this.loadedFriends.length > 0){
-      this.markFriendsLocation();
+    if (this.loadedFriends) {
+      if (this.loadedFriends.length > 0){
+        this.markFriendsLocation();
+      }
     }
   }
 
@@ -194,15 +198,13 @@ export class HomePage implements OnInit {
           map: this.map,
           icon: 'assets/icon/userMark.png'
         });
-
-        console.log(pos);
+        // console.log(pos);
         this.map.setCenter(pos);
       });
     }
   }
 
   showMap() {
-    // console.log('test', pos);
     const location = new google.maps.LatLng(this.umnPos.lat, this.umnPos.lng);
     const options = {
       center: location,
@@ -270,10 +272,7 @@ export class HomePage implements OnInit {
   }
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
     setTimeout(() => {
-      console.log('Async operation has ended');
       this.refresherRef.complete();
     }, 2000);
   }

@@ -42,9 +42,9 @@
     </ion-card-header>
   </ion-card>
   <ion-list *ngIf="userLocations !== null">
-    <ion-item lines="none" *ngFor="let loc of userLocations; let i = index" (press)="itemPressed(i)">
+    <ion-item lines="none" *ngFor="let loc of userLocations; let i = index" (press)="presentAlert(i)">
       <ion-icon slot="start" name="pin-outline" color="primary"></ion-icon>
-      <ion-label>
+      <ion-label class="ion-text-wrap">
         {{ user?.fName }} checked-in at {{loc.place}} {{loc.time}}
       </ion-label>
     </ion-item>

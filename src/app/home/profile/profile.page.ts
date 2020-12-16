@@ -48,7 +48,7 @@ export class ProfilePage implements OnInit {
   ionViewWillEnter(){
     // get user logged id
     this.authService.userDetails().subscribe(res => {
-      console.log('res', res);
+      // console.log('res', res);
       if (res !== null) {
         // console.log(res.uid);
         this.userId = res.uid;
@@ -58,7 +58,7 @@ export class ProfilePage implements OnInit {
         this.navCtrl.navigateBack('');
       }
     }, err => {
-      console.log('err', err);
+      // console.log('err', err);
     });
   }
 
@@ -66,13 +66,13 @@ export class ProfilePage implements OnInit {
     // get photo from storage
     const ref = this.storage.ref('profilePhoto/' + this.userId + '.jpg');
     ref.getDownloadURL().subscribe(res => {
-      console.log('res', res);
+      // console.log('res', res);
       this.photo = res;
       if (res <= 0) {
         this.photo = null;
       }
     });
-    console.log(this.photo);
+    // console.log(this.photo);
   }
 
   async getPicture(type: string){
@@ -89,9 +89,9 @@ export class ProfilePage implements OnInit {
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Prompt
     });
-    console.log(image);
+    // console.log(image);
     this.photo = image.dataUrl;
-    console.log('this.photo: ', this.photo);
+    // console.log('this.photo: ', this.photo);
     this.upload();
   }
 
@@ -113,7 +113,7 @@ export class ProfilePage implements OnInit {
 
   upload() {
     const file = this.dataURLtoFile(this.photo, 'file');
-    console.log('file:', file);
+    // console.log('file:', file);
     const filepath = 'profilePhoto/' + this.userId + '.jpg';
     const ref = this.storage.ref(filepath);
     const task = ref.put(file);
@@ -141,23 +141,21 @@ export class ProfilePage implements OnInit {
         )
     ).subscribe(data => {
       this.user = data[0].data;
-      console.log(this.user);
-      // if (this.user.storageRef != null){
-      //   this.imageUrl = this.user.storageRef;
-      //   console.log('imageurl : ' + this.imageUrl);
-      // }
-      // else{
-      //   this.imageUrl = 'assets/icon/person.png';
-      // }
-      this.userLocationsBackup = this.user.locations;
-      this.userLocationsBackup.reverse();
-      // console.log(this.userLocationsBackup);
-      this.getMyFeed();
+      // console.log(this.user);
+      if (this.user.locations){
+        this.userLocationsBackup = this.user.locations;
+        this.userLocationsBackup.reverse();
+        this.getMyFeed();
+      } else {
+        this.userLocations = null;
+      }
     });
   }
 
   getMyFeed() {
-    if (this.user.locations) {
+    if (this.user.locations.length <= 0) {
+      this.userLocations = null;
+    } else {
       this.userLocations = [];
       for (this.i = 0 ; this.i < this.user.locations.length ; this.i++){
         const timeStamp = this.user.locations[this.i].date;
@@ -168,9 +166,6 @@ export class ProfilePage implements OnInit {
           time
         };
         this.userLocations.push(newLocation);
-      }
-      if (this.userLocations.length <= 0) {
-        this.userLocations = null;
       }
     }
   }
@@ -212,19 +207,14 @@ export class ProfilePage implements OnInit {
     await toast.present();
   }
 
-  itemPressed(idx) {
-    console.log(idx);
-    this.presentAlert(idx);
-  }
-
   logout(){
     this.authService.logoutUser()
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.navCtrl.navigateForward(['/login']);
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
         });
   }
 

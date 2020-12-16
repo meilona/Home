@@ -11,12 +11,9 @@ import {AuthService} from '../../services/auth.service';
   styleUrls: ['./friends.page.scss'],
 })
 export class FriendsPage implements OnInit {
-  // userData: any;
-  // loadedUser: any;
   tempUser: any;
   private i: number;
   private j: number;
-  // private k = 0;
   loadedFriends: any;
   userFriends: any;
   userId: any;
@@ -34,7 +31,7 @@ export class FriendsPage implements OnInit {
   ngOnInit() {
     // get user logged id
     this.authService.userDetails().subscribe(res => {
-      console.log('res', res);
+      // console.log('res', res);
       if (res !== null) {
         // console.log(res.uid);
         this.userId = res.uid;
@@ -43,7 +40,7 @@ export class FriendsPage implements OnInit {
         this.navCtrl.navigateBack('');
       }
     }, err => {
-      console.log('err', err);
+      // console.log('err', err);
     });
   }
 
@@ -91,7 +88,7 @@ export class FriendsPage implements OnInit {
     ).subscribe(data => {
       if (data[0].data.friendList && data[0].data.friendList[0] !== ''){
         this.userFriends = data[0].data.friendList.split(',');
-        console.log(this.userFriends);
+        // console.log(this.userFriends);
         this.getFriendsData(1);
       } else {
         this.userFriends = [];
@@ -124,21 +121,19 @@ export class FriendsPage implements OnInit {
         }
         this.friendListBackup = this.loadedFriends;
       }
-      console.log(this.loadedFriends);
+      // console.log(this.loadedFriends);
     });
   }
 
   addFriends(){
-    console.log('search people.');
-    this.router.navigate(['home/friends/add'], {
-      state: { notFriends: this.tempUser , friendList : this.userFriends}
-    });
+    // console.log('search people.');
+    this.router.navigate(['home/friends/add']);
   }
 
   async filterSearch(ev){
     this.loadedFriends = this.friendListBackup;
     const searchTerm = ev.target.value;
-    console.log(searchTerm);
+    // console.log(searchTerm);
     if (!searchTerm) {
       return;
     }

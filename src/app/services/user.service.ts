@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import {UserModel} from '../models/user.model';
-import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
 
@@ -10,7 +8,7 @@ import {AngularFireStorage} from '@angular/fire/storage';
 export class UserService {
 
   private dbPath = 'user';
-  userRef: AngularFirestoreCollection<UserModel> = null;
+  userRef: AngularFirestoreCollection<any> = null;
   private storageRef: any;
 
   constructor(

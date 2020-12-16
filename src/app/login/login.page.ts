@@ -46,14 +46,14 @@ export class LoginPage implements OnInit {
   loginUser(value) {
     this.authService.loginUser(value)
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.errorMessage = '';
           this.validationForm.reset();
           this.navCtrl.navigateForward('/home');
         }, err => {
           console.dir(err);
           if (err.code === 'auth/user-not-found') {
-            console.log('User not found');
+            // console.log('User not found');
           }
           this.errorMessage = 'email or password is incorrect';
         });

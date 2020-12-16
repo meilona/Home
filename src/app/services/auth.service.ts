@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {UserModel} from '../models/user.model';
-import {UserService} from './user.service';
-import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -12,13 +9,13 @@ import firebase from 'firebase';
   providedIn: 'root'
 })
 export class AuthService {
-    private userCollection: AngularFirestoreCollection<UserModel>;
-    private users: Observable<UserModel[]>;
+    private userCollection: AngularFirestoreCollection<any>;
+    private users: Observable<any[]>;
 
     constructor(private fireAuth: AngularFireAuth,
                 private db: AngularFirestore
     ) {
-        this.userCollection = db.collection<UserModel> ('user');
+        this.userCollection = db.collection<any> ('user');
         this.users = this.userCollection.snapshotChanges().pipe(
             map (actions => {
                 return actions.map (a => {
@@ -37,7 +34,7 @@ export class AuthService {
           .then(
               res => {
                 console.log('User id after reigstration = ' + res.user.uid);
-                const user: UserModel = {
+                const user: any = {
                   id: res.user.uid,
                   email: value.email,
                   fName: value.fName,
