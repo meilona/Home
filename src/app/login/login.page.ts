@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NavController} from '@ionic/angular';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ import {AuthService} from '../services/auth.service';
 export class LoginPage implements OnInit {
 
   constructor(
-      private navCtrl: NavController,
+      private router: Router,
       private afAuth: AngularFireAuth,
       private authService: AuthService,
       private formBuilder: FormBuilder
@@ -22,16 +22,21 @@ export class LoginPage implements OnInit {
   validationForm: FormGroup;
   errorMessage = '';
 
+  passwordType = 'password';
+
   validationMessages = {
     email: [
       { type: 'required', message: 'Email is required.' },
       { type: 'pattern', message: 'Please enter a valid email.' }
     ],
     password: [
-      { type: 'required', message: 'Password is required.' },
-      { type: 'minlength', message: 'Password must be at least 5 characters long.' }
+      { type: 'required', message: 'Password is required.' }
     ]
   };
+
+  togglePasswordMode() {
+    this.passwordType = this.passwordType === 'text' ? 'password' : 'text';
+  }
 
   ngOnInit() {
     this.validationForm = this.formBuilder.group({
@@ -39,7 +44,9 @@ export class LoginPage implements OnInit {
         Validators.required,
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ])),
-      password: new FormControl('', ),
+      password: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
     });
   }
 
@@ -49,7 +56,7 @@ export class LoginPage implements OnInit {
           // console.log(res);
           this.errorMessage = '';
           this.validationForm.reset();
-          this.navCtrl.navigateForward('/home');
+          this.router.navigate(['home']);
         }, err => {
           console.dir(err);
           if (err.code === 'auth/user-not-found') {
@@ -60,6 +67,6 @@ export class LoginPage implements OnInit {
   }
 
   goToRegisterPage() {
-    this.navCtrl.navigateForward('/register');
+    this.router.navigate(['register']);
   }
 }

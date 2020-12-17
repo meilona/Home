@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Profile</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title style="color: white">Profile</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
-        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+        <ion-icon slot="icon-only" name="log-out-outline" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -19,7 +19,7 @@
       </ion-avatar>
       <ion-fab vertical="bottom" horizontal="center" style="margin-left: 10px">
         <ion-fab-button (click)="getPicture('camera')">
-          <ion-icon name="camera-reverse-outline"></ion-icon>
+          <ion-icon name="camera-reverse-outline" color="light"></ion-icon>
         </ion-fab-button>
       </ion-fab>
     </ion-card-content>

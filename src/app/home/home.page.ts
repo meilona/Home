@@ -160,7 +160,7 @@ export class HomePage implements OnInit {
           clickable: true
         });
         marker.info = new google.maps.InfoWindow({
-          content: this.loadedFriends[this.i].fName
+          content: this.loadedFriends[this.i].fName + ' is at ' + eachFriendLocation.place
         });
         google.maps.event.addListener(marker, 'click', function() {
           marker.info.open(map, marker);
