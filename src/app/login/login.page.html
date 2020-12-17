@@ -21,7 +21,7 @@
         <ion-item class="box" lines="none">
           <ion-label position="stacked" color="primary">Password</ion-label>
           <ion-input [type]="passwordType" type="password" formControlName="password" class="form-controll" required></ion-input>
-          <ion-icon name="eye" slot="end" (click)="togglePasswordMode()" class="ion-align-items-center"></ion-icon>
+          <ion-icon class="ion-align-self-center" name="eye" slot="end" (click)="togglePasswordMode()" ></ion-icon>
         </ion-item>
         <div class="validation-errors">
           <ng-container *ngFor="let validation of validationMessages.password">
