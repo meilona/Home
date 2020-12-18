@@ -38,7 +38,8 @@ export class AuthService {
                   id: res.user.uid,
                   email: value.email,
                   fName: value.fName,
-                  lName: value.lName
+                  lName: value.lName,
+                  profilePhoto: 'assets/icon/person.png'
                 };
                 this.userCollection.doc(res.user.uid).set(user);
                 resolve(res);

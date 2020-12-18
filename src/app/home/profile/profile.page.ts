@@ -24,6 +24,9 @@ export class ProfilePage implements OnInit {
   imageUrl: any;
   photo: SafeResourceUrl;
   isDesktop: boolean;
+  img1: SafeResourceUrl;
+  object: any;
+  fileName: any = '';
 
   constructor(
       private activatedRoute: ActivatedRoute,
@@ -92,6 +95,10 @@ export class ProfilePage implements OnInit {
     // console.log(image);
     this.photo = image.dataUrl;
     // console.log('this.photo: ', this.photo);
+    this.object = image.webPath;
+    const blob = await fetch(image.webPath).then(r => r.blob());
+    this.img1 = this.sanitizer.bypassSecurityTrustResourceUrl(image && (image.webPath));
+    this.fileName = blob;
     this.upload();
   }
 
@@ -117,6 +124,7 @@ export class ProfilePage implements OnInit {
     const filepath = 'profilePhoto/' + this.userId + '.jpg';
     const ref = this.storage.ref(filepath);
     const task = ref.put(file);
+    this.userService.updatePicture(this.userId, filepath);
   }
 
   dataURLtoFile(dataurl, filename) {
