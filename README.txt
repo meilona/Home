@@ -1,3 +1,7 @@
+Hosting Link :
+https://home-brown.vercel.app/login
+credential sample account (email // pass) : mei@gmail.com // 000000
+
 ABOUT APP:
 Aplikasi terdapat 3 tabs menu:
 - Home : Menampilkan maps, beserta lokasi teman yang ada, bila pin lokasi teman ditekan, akan terlihat nama teman dan tempatnya. User dapat melakukan check in dengan pin lokasi saat ini dan memasukkan nama tempatnya untuk check in. Cara lain, user dapat pin lokasi manual pada maps lalu melakukan check in dengan memasukkan nama tempatnya. Sudah di set juga secara otomatis update lokasi terakhir user setiap 10 menit tapi ini nama tempatnya di set auto update karena geo coder google bayar kalo gasalah ko wkwk.
